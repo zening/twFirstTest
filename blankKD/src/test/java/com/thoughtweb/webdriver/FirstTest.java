@@ -6,7 +6,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -113,17 +115,26 @@ public class FirstTest
 
         driver.quit();
 
-        loginKD();
+        //StartKD();
+
+        //LoginKD();
 
     }
 
     @Test
-    public void loginKD(){
+    public void StartKD(){
 
         System.setProperty("webdriver.chrome.driver", "C://seleniumIDE//chrome/chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
 
-        //WebDriver driver = new FirefoxDriver();
+
+        ChromeOptions options = new ChromeOptions();
+        //options.addArguments("disable-web-security");
+        //options.addArguments("start-maximized");
+        options.addArguments("test-type");
+
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+        ChromeDriver driver = new ChromeDriver(options);
 
         userName = "appman";
         password = "J@Jwuth2f@p0wJf";
@@ -136,6 +147,38 @@ public class FirstTest
 
         driver.findElement(By.cssSelector("select#PooledKDs option[value=\"" + kdName + "\"]")).click();
         driver.findElement(By.cssSelector("input[value=\"Start Pooled KD\"]")).click();
+
+        driver.quit();
+
+    }
+
+    @Test
+    public void LoginKD(){
+        System.setProperty("webdriver.chrome.driver", "C://seleniumIDE//chrome/chromedriver.exe");
+
+
+        ChromeOptions options = new ChromeOptions();
+        //options.addArguments("disable-web-security");
+        //options.addArguments("start-maximized");
+        options.addArguments("test-type");
+
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+        ChromeDriver driver = new ChromeDriver(options);
+
+        driver.get(baseUrl + "/" + servletContext);
+        userName = "appman";
+        password = "J@Jwuth2f@p0wJf";
+        driver.get(baseUrl + "/" + servletContext);
+        assertTrue(driver.getTitle().startsWith("ThoughtWeb Login"));
+        driver.findElement(By.id("j_username")).sendKeys(userName);
+        driver.findElement(By.id("password")).sendKeys(password);
+        driver.findElement(By.cssSelector("input[type=\"submit\"]")).click();
+
+        driver.findElement(By.cssSelector("div.portalLinks a[href=\"/"+servletContext+"/app/"+kdName+"/\"]")).click();
+
+        driver.findElement(By.cssSelector("td.nav img[name='Build']")).click();
+
 
     }
 }
