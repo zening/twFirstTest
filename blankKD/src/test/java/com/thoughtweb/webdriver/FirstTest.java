@@ -23,7 +23,7 @@ import static junit.framework.Assert.assertTrue;
 public class FirstTest
 
 {
-    public String baseUrl = "http://10.35.249.109:8080/";
+    public String baseUrl = "http://10.35.249.122:8080/";
     public String servletContext = "twservlet";
     public String kdName = "jMeter";
     public String userName = "appman";
@@ -36,12 +36,13 @@ public class FirstTest
         driver.get(baseUrl + "/" + servletContext);
         assertTrue(driver.getTitle().startsWith("ThoughtWeb Login"));
 
+        // login
         driver.findElement(By.id("j_username")).sendKeys(userName);
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.cssSelector("input[type=\"submit\"]")).click();
 
         // start here
-        driver.findElement(By.cssSelector("div.portalLinks a[href=\"/"+servletContext+"/app/admin/\"]")).click();
+        driver.findElement(By.cssSelector("div.portalLinks a[href=\"admin/\"]")).click();
 
         // stop it first if running
         if(!driver.findElements(By.cssSelector("select#RunningKDs option[value=\""+kdName+"\"]")).isEmpty()){
@@ -55,6 +56,7 @@ public class FirstTest
             Thread.currentThread().interrupt();
         }
 
+        // select the KD to move
         driver.findElement(By.cssSelector("select#AvailableKDs option[value=\""+kdName+"\"]")).click();
 
         //connect kd to Pooled box
@@ -154,7 +156,7 @@ public class FirstTest
         driver.findElement(By.id("j_username")).sendKeys(userName);
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.cssSelector("input[type=\"submit\"]")).click();
-        driver.findElement(By.cssSelector("div.portalLinks a[href=\"/"+servletContext+"/app/admin/\"]")).click();
+        driver.findElement(By.cssSelector("div.portalLinks a[href=\"admin/\"]")).click();
 
         driver.findElement(By.cssSelector("select#PooledKDs option[value=\"" + kdName + "\"]")).click();
         driver.findElement(By.cssSelector("input[value=\"Start Pooled KD\"]")).click();
@@ -185,7 +187,7 @@ public class FirstTest
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.cssSelector("input[type=\"submit\"]")).click();
 
-        driver.findElement(By.cssSelector("div.portalLinks a[href=\"/"+servletContext+"/app/"+kdName+"/\"]")).click();
+        driver.findElement(By.cssSelector("div.portalLinks a[href=\""+kdName+"/\"]")).click();
 
         driver.findElement(By.cssSelector("td.nav img[name='Build']")).click();
 
@@ -200,7 +202,7 @@ public class FirstTest
 
         driver.findElement(By.name("ConceptName")).sendKeys("A");
         driver.findElement(By.name("ConceptPlural")).sendKeys("A");
-        driver.findElement(By.name("ConceptMapY")).sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        driver.findElement(By.name("ConceptMapY")).sendKeys(Keys.chord(Keys.CONTROL, "a")); //select all
         driver.findElement(By.name("ConceptMapY")).sendKeys("200");
         driver.findElement(By.cssSelector("body > form:nth-child(4) > table:nth-child(10) > tbody > tr:nth-child(2) > td > input[type=\"radio\"]:nth-child(5)")).click();
         driver.findElement(By.id("btnfmConceptProperties1")).click();
@@ -214,9 +216,9 @@ public class FirstTest
 
         driver.findElement(By.name("ConceptName")).sendKeys("B");
         driver.findElement(By.name("ConceptPlural")).sendKeys("B");
-        driver.findElement(By.name("ConceptMapX")).sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        driver.findElement(By.name("ConceptMapX")).sendKeys(Keys.chord(Keys.CONTROL, "a")); //select all
         driver.findElement(By.name("ConceptMapX")).sendKeys("300");
-        driver.findElement(By.name("ConceptMapY")).sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        driver.findElement(By.name("ConceptMapY")).sendKeys(Keys.chord(Keys.CONTROL, "a")); //select all
         driver.findElement(By.name("ConceptMapY")).sendKeys("200");
         driver.findElement(By.cssSelector("body > form:nth-child(4) > table:nth-child(10) > tbody > tr:nth-child(2) > td > input[type=\"radio\"]:nth-child(5)")).click();
         driver.findElement(By.id("btnfmConceptProperties1")).click();
@@ -230,13 +232,15 @@ public class FirstTest
 
         driver.findElement(By.name("ConceptName")).sendKeys("C");
         driver.findElement(By.name("ConceptPlural")).sendKeys("C");
-        driver.findElement(By.name("ConceptMapX")).sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        driver.findElement(By.name("ConceptMapX")).sendKeys(Keys.chord(Keys.CONTROL, "a")); //select all
         driver.findElement(By.name("ConceptMapX")).sendKeys("300");
         driver.findElement(By.cssSelector("body > form:nth-child(4) > table:nth-child(10) > tbody > tr:nth-child(2) > td > input[type=\"radio\"]:nth-child(5)")).click();
         driver.findElement(By.id("btnfmConceptProperties1")).click();
         driver.switchTo().window(parentHandle); // back to the main window
         driver.switchTo().frame("Content");
 
+
+        // open concept connections popup
         driver.findElement(By.xpath("/html/body/a[1]")).click();
 
         for (String winHandle : driver.getWindowHandles()) {
@@ -283,13 +287,17 @@ public class FirstTest
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.cssSelector("input[type=\"submit\"]")).click();
 
-        driver.findElement(By.cssSelector("div.portalLinks a[href=\"/"+servletContext+"/app/"+kdName+"/\"]")).click();
+        driver.findElement(By.cssSelector("div.portalLinks a[href=\""+kdName+"/\"]")).click();
 
         driver.findElement(By.cssSelector("td.nav img[name='Build']")).click();
 
         driver.switchTo().frame("Content");
-        driver.findElement(By.cssSelector("body > center > map > area:nth-child(2)")).click();
-        driver.findElement(By.cssSelector("body > center > input[type=\"button\"]")).click();
+
+        // open A KS table
+        driver.findElement(By.cssSelector("body > table > tbody > tr:nth-child(2) > td:nth-child(2) > a")).click();
+
+        //driver.findElement(By.cssSelector("body > center > map > area:nth-child(2)")).click();
+        driver.findElement(By.cssSelector("body > center:nth-child(1) > input:nth-child(7)")).click();
 
         String parentHandle = driver.getWindowHandle();
 
@@ -307,8 +315,12 @@ public class FirstTest
         driver.switchTo().window(parentHandle); // back to the main window
         driver.findElement(By.cssSelector("td.nav img[name='Build']")).click();
         driver.switchTo().frame("Content");
-        driver.findElement(By.cssSelector("body > center > map > area:nth-child(3)")).click();
-        driver.findElement(By.cssSelector("body > center > input[type=\"button\"]")).click();
+
+        //open B KS table
+        //driver.findElement(By.cssSelector("body > center > map > area:nth-child(3)")).click();
+        driver.findElement(By.cssSelector("body > table > tbody > tr:nth-child(3) > td:nth-child(2) > a")).click();
+
+        driver.findElement(By.cssSelector("body > center:nth-child(1) > input:nth-child(7)")).click();
 
 
         for (String winHandle : driver.getWindowHandles()) {
@@ -323,10 +335,17 @@ public class FirstTest
         driver.findElement(By.cssSelector("#fmWizard > table:nth-child(2) > tbody > tr > td > input[type=\"button\"]:nth-child(6)")).click();
 
         driver.switchTo().window(parentHandle); // back to the main window
+
+
+
         driver.findElement(By.cssSelector("td.nav img[name='Build']")).click();
         driver.switchTo().frame("Content");
-        driver.findElement(By.cssSelector("body > center > map > area:nth-child(4)")).click();
-        driver.findElement(By.cssSelector("body > center > input[type=\"button\"]")).click();
+        //driver.findElement(By.cssSelector("body > center > map > area:nth-child(4)")).click();
+
+        // open C KS
+        driver.findElement(By.cssSelector("body > table > tbody > tr:nth-child(4) > td:nth-child(2) > a")).click();
+
+        driver.findElement(By.cssSelector("body > center:nth-child(1) > input:nth-child(7)")).click();
 
 
         for (String winHandle : driver.getWindowHandles()) {
@@ -344,16 +363,17 @@ public class FirstTest
         driver.findElement(By.cssSelector("td.nav img[name='Build']")).click();
         driver.switchTo().frame("Content");
 
-        // open A KS
-        driver.findElement(By.cssSelector("body > center > map > area:nth-child(1)")).click();
-        // click on a1 edit
+        // open Context KS
+        driver.findElement(By.cssSelector("body > table > tbody > tr:nth-child(1) > td:nth-child(2) > a")).click();
+
+        // click on Center edit
         driver.findElement(By.cssSelector("#ksHeaderTable > tbody > tr.Center.rowOdd > td.KsName > a:nth-child(1) > img")).click();
 
         for (String winHandle : driver.getWindowHandles()) {
             driver.switchTo().window(winHandle); // switch focus of WebDriver to the next found window handle (that's your newly opened window)
         }
 
-        // Center object connections
+        // Center object Connections
         driver.findElement(By.cssSelector("#fmWizard > table:nth-child(3) > tbody > tr > td > b > a:nth-child(1)")).click();
 
         driver.findElement(By.cssSelector("#fmWizard > center > table:nth-child(1) > tbody > tr:nth-child(3) > td:nth-child(2) > center > input[type=\"RADIO\"]:nth-child(3)")).click();
@@ -370,7 +390,8 @@ public class FirstTest
         driver.switchTo().frame("Content");
 
         //open B KS
-        driver.findElement(By.cssSelector("body > center > map > area:nth-child(3)")).click();
+        //driver.findElement(By.cssSelector("body > center > map > area:nth-child(3)")).click();
+        driver.findElement(By.cssSelector("body > table > tbody > tr:nth-child(3) > td:nth-child(2) > a")).click();
         driver.findElement(By.cssSelector("#ksHeaderTable > tbody > tr.b1.rowOdd > td.KsName > a:nth-child(1) > img")).click();
 
         for (String winHandle : driver.getWindowHandles()) {
@@ -435,7 +456,7 @@ public class FirstTest
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.cssSelector("input[type=\"submit\"]")).click();
 
-        driver.findElement(By.cssSelector("div.portalLinks a[href=\"/"+servletContext+"/app/"+kdName+"/\"]")).click();
+        driver.findElement(By.cssSelector("div.portalLinks a[href=\""+kdName+"/\"]")).click();
 
 
         // from the topic menu
@@ -515,12 +536,12 @@ public class FirstTest
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.cssSelector("input[type=\"submit\"]")).click();
 
-        driver.findElement(By.cssSelector("div.portalLinks a[href=\"/" + servletContext + "/app/" + kdName + "/\"]")).click();
+        driver.findElement(By.cssSelector("div.portalLinks a[href=\""+kdName+"/\"]")).click();
 
         String parentHandle = driver.getWindowHandle();
 
         // click the build icon
-        driver.findElement(By.cssSelector("body > table > tbody > tr:nth-child(1) > td > table > tbody > tr > td.nav > a:nth-child(15) > img")).click();
+        driver.findElement(By.cssSelector("body > table > tbody > tr:nth-child(1) > td > table > tbody > tr > td.nav > a:nth-child(16) > img")).click();
 
         driver.switchTo().frame("Content");
         driver.findElement(By.cssSelector("body > table > tbody > tr:nth-child(2) > td:nth-child(1) > a > img")).click();
@@ -558,7 +579,7 @@ public class FirstTest
 
         driver.findElement(By.cssSelector("body > form:nth-child(4) > table:nth-child(31) > tbody > tr:nth-child(3) > td:nth-child(6) > select > option:nth-child(2)")).click();
 
-        driver.findElement(By.cssSelector("#btnfmConceptProperties240")).click();
+        driver.findElement(By.cssSelector("#btnfmConceptProperties242")).click();
 
         // back to main page
         driver.switchTo().window(parentHandle);
@@ -589,7 +610,7 @@ public class FirstTest
 
         driver.findElement(By.cssSelector("body > form:nth-child(4) > table:nth-child(31) > tbody > tr:nth-child(3) > td:nth-child(6) > select > option:nth-child(2)")).click();
 
-        driver.findElement(By.cssSelector("#btnfmConceptProperties240")).click();
+        driver.findElement(By.cssSelector("#btnfmConceptProperties242")).click();
 
 
         // back to main page
@@ -607,7 +628,7 @@ public class FirstTest
         assertEquals("0.0", driver.findElement(By.cssSelector("#PerfMs1Base")).getAttribute("value") ) ;
         assertEquals("100.0", driver.findElement(By.cssSelector("#PerfMs1Target")).getAttribute("value") ) ;
 
-        driver.findElement(By.cssSelector("#btnfmConceptProperties240")).click();
+        driver.findElement(By.cssSelector("#btnfmConceptProperties242")).click();
 
         // back to main page
         driver.switchTo().window(parentHandle);
@@ -616,7 +637,8 @@ public class FirstTest
         driver.switchTo().frame("Content");
 
         // A KS
-        driver.findElement(By.cssSelector("body > center > map > area:nth-child(2)")).click();
+        //driver.findElement(By.cssSelector("body > center > map > area:nth-child(2)")).click();
+        driver.findElement(By.cssSelector("body > table > tbody > tr:nth-child(2) > td:nth-child(2) > a")).click();
         // click on a1 edit
         driver.findElement(By.cssSelector("#ksHeaderTable > tbody > tr.a1.rowOdd > td.PValue > a > img")).click();
 
@@ -652,7 +674,9 @@ public class FirstTest
         driver.switchTo().frame("Content");
 
         // B KS
-        driver.findElement(By.cssSelector("body > center > map > area:nth-child(3)")).click();
+        driver.findElement(By.cssSelector("body > table > tbody > tr:nth-child(3) > td:nth-child(2) > a")).click();
+
+
         // click on b1 edit
         driver.findElement(By.cssSelector("#ksHeaderTable > tbody > tr.b1.rowOdd > td.PValue > a > img")).click();
         // click on Performance1
@@ -705,7 +729,7 @@ public class FirstTest
         driver.findElement(By.id("password")).sendKeys(password);
         driver.findElement(By.cssSelector("input[type=\"submit\"]")).click();
 
-        driver.findElement(By.cssSelector("div.portalLinks a[href=\"/"+servletContext+"/app/"+kdName+"/\"]")).click();
+        driver.findElement(By.cssSelector("div.portalLinks a[href=\""+kdName+"/\"]")).click();
 
 
         // run SIPRA 2nd time
